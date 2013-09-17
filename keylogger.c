@@ -19,6 +19,15 @@ int main(int argc, const char *argv[]) {
     CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopCommonModes);
     CGEventTapEnable(eventTap, true);
 
+    // Clear the logfile if clear argument used or log to specific file if given.
+    if(argc == 2) {
+        if(strcmp(argv[1], "clear") == 0) {
+            fopen(logfileLocation, "w");
+        } else {
+            logfileLocation = argv[1];
+        }
+    }
+
     // Get the current time and open the logfile.
     time_t result = time(NULL);
     logfile = fopen(logfileLocation, "a");
