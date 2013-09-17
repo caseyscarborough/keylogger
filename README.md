@@ -7,11 +7,11 @@ This repository holds the code for a simple and easy to use keylogger for Mac OS
 Start by cloning the repository and running the proper make commands, shown below. By default, the application installs to `/usr/local/bin/keylogger`.
 
 ```bash
-$ git clone https://github.com/caseyscarborough/keylog && cd keylog
+$ git clone https://github.com/caseyscarborough/keylogger && cd keylogger
 $ make && make install
 ```
 
-The application by default logs to `/var/log/keystroke.log`, which may require root access depending on your system's permissions. You can change this in [`keylogger.h`](https://github.com/caseyscarborough/keylog/blob/master/keylogger.h#L12) if necessary.
+The application by default logs to `/var/log/keystroke.log`, which may require root access depending on your system's permissions. You can change this in [`keylogger.h`](https://github.com/caseyscarborough/keylogger/blob/master/keylogger.h#L12) if necessary.
 
 ```bash
 $ sudo keylogger
