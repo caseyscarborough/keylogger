@@ -1,6 +1,6 @@
-CC=g++
+CC=gcc
 CFLAGS=-framework ApplicationServices -framework Carbon
-SOURCES=keylogger.cpp keylogger.h
+SOURCES=keylogger.c keylogger.h
 EXECUTABLE=keylogger
 INSTALLDIR=/usr/local/bin
 

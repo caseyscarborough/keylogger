@@ -10,7 +10,7 @@ int main(int argc, const char *argv[]) {
 
     // Exit the program if unable to create the event tap.
     if(!eventTap) {
-        cout << "Unable to create event tap.\n" << endl;
+        printf("Unable to create event tap.\n");
         exit(1);
     }
 
@@ -28,7 +28,8 @@ int main(int argc, const char *argv[]) {
     fflush(logfile);
 
     // Display the location of the logfile and start the loop.
-    cout << "Logging to: " << logfileLocation << endl;
+    printf("Logging to: %s\n", logfileLocation);
+    fflush(stdout);
     CFRunLoopRun();
 
     return 0;
