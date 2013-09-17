@@ -4,7 +4,7 @@ This repository holds the code for a simple and easy to use keylogger for Mac OS
 
 ## Usage
 
-Start by cloning the repository and running the proper make commands, shown below. By default, the application installs to `/usr/local/bin/keylogger`.
+Start by cloning the repository and running the proper make commands, shown below. By default, the application installs to `/usr/local/bin/keylogger`, which can easily be changed in the [`Makefile`](https://github.com/caseyscarborough/keylogger/blob/master/Makefile). `make install` may require root access.
 
 ```bash
 $ git clone https://github.com/caseyscarborough/keylogger && cd keylogger
@@ -14,8 +14,22 @@ $ make && make install
 The application by default logs to `/var/log/keystroke.log`, which may require root access depending on your system's permissions. You can change this in [`keylogger.h`](https://github.com/caseyscarborough/keylogger/blob/master/keylogger.h#L12) if necessary.
 
 ```bash
-$ sudo keylogger
+$ keylogger
 Logging to: /var/log/keystroke.log
+```
+
+If you'd like the application to run on startup, run the `startup` make target:
+
+```bash
+$ sudo make startup
+```
+
+## Uninstallation
+
+You can completely remove the application from your system (including the startup daemon) by running the following command (logs will not be deleted):
+
+```bash
+$ sudo make uninstall
 ```
 
 ### Optional Parameters
@@ -24,12 +38,11 @@ You can pass in two optional parameters to the program. The `clear` option will 
 
 ```bash
 # Clear the logfile.
-$ sudo keylogger clear
+$ keylogger clear
 Logfile cleared.
-Logging to: /var/log/keystroke.log
 
 # Specify a logfile location.
-$ sudo keylogger ~/logfile.txt
+$ keylogger ~/logfile.txt
 Logging to: /Users/Casey/logfile.txt
 ```
 
