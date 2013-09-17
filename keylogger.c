@@ -23,6 +23,8 @@ int main(int argc, const char *argv[]) {
     if(argc == 2) {
         if(strcmp(argv[1], "clear") == 0) {
             fopen(logfileLocation, "w");
+            printf("Logfile cleared.\n");
+            fflush(stdout);
         } else {
             logfileLocation = argv[1];
         }
