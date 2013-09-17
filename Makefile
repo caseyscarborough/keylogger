@@ -11,11 +11,13 @@ all: $(SOURCES)
 install:
 	mkdir -p $(INSTALLDIR)
 	cp $(EXECUTABLE) $(INSTALLDIR)
-	cp $(PLIST) /Library/LaunchDaemons
 
 uninstall:
 	rm $(INSTALLDIR)/$(EXECUTABLE)
 	rm /Library/LaunchDaemons/$(PLIST)
+
+startup:
+	cp $(PLIST) /Library/LaunchDaemons
 
 clean:
 	rm $(EXECUTABLE)
