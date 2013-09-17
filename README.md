@@ -8,15 +8,29 @@ Start by cloning the repository and running the proper make commands, shown belo
 
 ```bash
 $ git clone https://github.com/caseyscarborough/keylog && cd keylog
-$ make
-$ make install
+$ make && make install
 ```
 
-The application by default logs to `/var/log/keystroke.log`, which may require root access depending on your system's permissions. You can change this in [`keylogger.h`](https://github.com/caseyscarborough/keylog/blob/master/keylogger.h#L14) if necessary.
+The application by default logs to `/var/log/keystroke.log`, which may require root access depending on your system's permissions. You can change this in [`keylogger.h`](https://github.com/caseyscarborough/keylog/blob/master/keylogger.h#L12) if necessary.
 
 ```bash
 $ sudo keylogger
 Logging to: /var/log/keystroke.log
+```
+
+### Optional Parameters
+
+You can pass in two optional parameters to the program. The `clear` option will clear the logs at the default location. Any other argument passed in will be used as the path to the log file for that process. See below:
+
+```bash
+# Clear the logfile.
+$ sudo keylogger clear
+Logfile cleared.
+Logging to: /var/log/keystroke.log
+
+# Specify a logfile location.
+$ sudo keylogger ~/logfile.txt
+Logging to: /Users/Casey/logfile.txt
 ```
 
 ## Contributing
