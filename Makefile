@@ -1,8 +1,17 @@
-all: keylogger.cpp keylogger.h
-	g++ keylogger.cpp -framework ApplicationServices -framework Carbon -o keylogger
+CC=g++
+CFLAGS=-framework ApplicationServices -framework Carbon
+SOURCES=keylogger.cpp keylogger.h
+EXECUTABLE=keylogger
+INSTALLDIR=/usr/local/bin
+
+all: $(SOURCES)
+	$(CC) $(SOURCES) $(CFLAGS) -o $(EXECUTABLE)
 
 install:
-	cp keylogger /usr/local/bin
+	cp $(EXECUTABLE) $(INSTALLDIR)
+
+uninstall:
+	rm $(INSTALLDIR)/$(EXECUTABLE)
 
 clean:
-	rm keylogger keystroke.log
+	rm $(EXECUTABLE)
