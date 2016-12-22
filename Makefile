@@ -8,7 +8,7 @@ INSTALLDIR=/usr/local/bin
 all: $(SOURCES)
 	$(CC) $(SOURCES) $(CFLAGS) -o $(EXECUTABLE)
 
-install:
+install: all
 	mkdir -p $(INSTALLDIR)
 	cp $(EXECUTABLE) $(INSTALLDIR)
 
@@ -16,7 +16,7 @@ uninstall:
 	rm $(INSTALLDIR)/$(EXECUTABLE)
 	rm /Library/LaunchDaemons/$(PLIST)
 
-startup:
+startup: install
 	cp $(PLIST) /Library/LaunchDaemons
 
 clean:
