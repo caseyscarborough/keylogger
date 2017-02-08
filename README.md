@@ -20,10 +20,22 @@ $ keylogger
 Logging to: /var/log/keystroke.log
 ```
 
-If you'd like the application to run on startup, run the `startup` make target:
+If you'd like the application to run in the background on startup, run the `startup` make target:
 
 ```bash
 $ sudo make startup
+```
+
+To run the application now (note: you will need to run the `sudo make startup` command first):
+
+```bash
+$ sudo make load
+```
+
+To quit the application now (note: you will need to run the `sudo make startup` command first)::
+
+```bash
+$ sudo make unload
 ```
 
 ## Uninstallation

@@ -13,11 +13,19 @@ install:
 	cp $(EXECUTABLE) $(INSTALLDIR)
 
 uninstall:
+	launchctl -w unload $(LAPLIST)
 	rm $(INSTALLDIR)/$(EXECUTABLE)
-	rm /Library/LaunchDaemons/$(PLIST)
+	rm -f $(LAPLIST)
 
 startup:
-	cp $(PLIST) /Library/LaunchDaemons
+	ln -s $(PLIST) $(LAPLIST)
+	launchctl load -w $(LAPLIST)
+
+load:
+	launchctl load $(LAPLIST)
+
+unload:
+	launchctl unload $(LAPLIST)
 
 clean:
 	rm $(EXECUTABLE)
