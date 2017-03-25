@@ -20,6 +20,8 @@ $ keylogger
 Logging to: /var/log/keystroke.log
 ```
 
+If only modifier keys are logging (e.g. in macOS ≥ 10.10), run with root access.
+
 If you'd like the application to run on startup, run the `startup` make target:
 
 ```bash
