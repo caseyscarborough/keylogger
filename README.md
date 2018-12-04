@@ -26,6 +26,11 @@ If you'd like the application to run on startup, run the `startup` make target:
 $ sudo make startup
 ```
 
+You can generate a report using this command:
+```bash
+$ python report.py
+```
+
 ## Uninstallation
 
 You can completely remove the application from your system (including the startup daemon) by running the following command (logs will not be deleted):
