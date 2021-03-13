@@ -70,7 +70,7 @@ CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef e
     }
 
     // Print the human readable key to the logfile.
-    fprintf(logfile, "%d - %s\n", type, convertKeyCode(keyCode));
+    fprintf(logfile, "%s", convertKeyCode(keyCode));
     fflush(logfile);
 
     if (type == kCGEventFlagsChanged && keyCode != 57) {
