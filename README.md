@@ -50,6 +50,18 @@ $ keylogger ~/logfile.txt
 Logging to: /Users/Casey/logfile.txt
 ```
 
+## Issues
+
+### Unable to Create Event Tap
+
+If you get the following error:
+
+```
+ERROR: Unable to create event tap.
+```
+
+Go into System Preferences and go to Security & Privacy, click the Privacy tab, choose Accessibility in the left pane, and ensure that Terminal is checked.
+
 ## Contributing
 
 Feel free to fork the project and submit a pull request with your changes!
