@@ -2,6 +2,7 @@
 #define __KEYLOGGER_H__
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <time.h>
 #include <string.h>
 #include <ApplicationServices/ApplicationServices.h>
@@ -12,6 +13,6 @@ FILE *logfile = NULL;
 const char *logfileLocation = "/var/log/keystroke.log";
 
 CGEventRef CGEventCallback(CGEventTapProxy, CGEventType, CGEventRef, void*);
-const char *convertKeyCode(int, int);
+const char *convertKeyCode(int, bool, bool);
 
 #endif
