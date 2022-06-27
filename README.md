@@ -1,5 +1,7 @@
 # Mac OS X Keylogger
 
+(fork of [`caseyscarborough/keylogger`](https://github.com/caseyscarborough/keylogger]))
+
 This repository holds the code for a simple and easy to use keylogger for Mac OS X. It is not meant to be malicious, and is written as a proof of concept. There is not a lot of information on keyloggers or implementing them on Mac OS X, and most of the ones I've seen do not work as indicated. This project aims to be a simple implementation on how it can be accomplished on OS X.
 
 > Note: This keylogger is currently unable to capture secure input such as passwords. See issue #3 for more information.
@@ -30,6 +32,11 @@ You can generate a report using this command:
 ```bash
 $ python report.py
 ```
+
+This script will print out some interesting statistics such as the the start date and end date of recorded keystrokes, the number of total keystrokes, and a histogram of the most frequent keys.
+
+<img width="549" alt="image" src="https://user-images.githubusercontent.com/13140065/176034556-be451bac-3725-4c79-aaaf-cc3a8ea06f20.png">
+ 
 
 ## Uninstallation
 
